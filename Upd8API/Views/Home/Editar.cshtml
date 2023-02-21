@@ -1,0 +1,192 @@
+﻿
+@model dynamic
+
+<div>
+    <h3>Editar Cliente</h3>
+</div>
+
+<div class="jumbotron">
+
+    <div class="row">
+
+        <input type="hidden" id="hdnIdCliente" value="@Model.Cadastro.Content.Id" />
+        <input type="hidden" id="hdnIdCidade" value="@Model.Cadastro.Content.MunicipioId" />
+        <input type="hidden" id="hdnSexo" value="@(Model.Cadastro.Content.Sexo == true ? 1 : 0)" />
+
+        <div class="col-sm-3 col-lg-3">
+            <label>CPF</label>
+            <input type="text" name="cpf" id="cpf" value="@Model.Cadastro.Content.CPF" class="form-control" maxlength="11" required>
+        </div>
+
+        <div class="col-sm-3 col-lg-3">
+            <label>Nome</label>
+            <input type="text" name="nome" id="nome" value="@Model.Cadastro.Content.Nome" class="form-control" required>
+        </div>
+
+        <div class="col-sm-3 col-lg-3">
+            <label>Data de Nascimento</label>
+            <input type="date" name="dtNascimento" id="dtNascimento" value="@Model.Cadastro.Content.DtNascimento.ToString("yyyy-MM-dd")" class="form-control" required>
+        </div>
+
+        <div class="col-sm-3 col-lg-3">
+            <div>
+                <label>Sexo</label>
+            </div>
+
+            <div class="col-sm-6 col-lg-6">
+                <input type="radio" name="rdoSexo" id="rdoSexoMasculino" value="1" checked>
+                <label for="">Masculino</label>
+            </div>
+
+            <div class="col-sm-6 col-lg-6">
+                <input type="radio" name="rdoSexo" id="rdoSexoFeminino" value="0">
+                <label for="">Feminino</label>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row ">
+
+        <div class="form-group col-sm-4 col-lg-4">
+            <label>Endereço</label>
+            <input type="text" name="endereco" id="endereco" value="@Model.Cadastro.Content.Endereco" class="form-control" required>
+        </div>
+
+        <div class="form-group col-sm-4 col-lg-4  ">
+            <label>Estado</label>
+            <select name="estado" id="estado" class="form-control form-control" onchange="fnObterCidades()" required>
+                <option value="0">Selecione</option>
+                @foreach (var item in Model.Estados)
+                {
+                    <option value="@item.Id" data-UF="@item.Uf" @(Model.Cadastro.Content.EstadoId == item.Id ? "selected" : "")>@item.Uf</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group col-sm-4 col-lg-4">
+            <label>Cidade</label>
+            <select name="cidade" id="cidade" class="form-control form-control" required>
+                <option value="0">Selecione</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="form-group text-right col-sm-12 col-lg-12">
+        <button type="button" id="btn_Salvar" class="btn btn-primary" onclick="fnEditarCadastro()">Salvar</button>
+        <a href="~/Home/Index" id="btn_Cancelar" class="btn btn-default">Cancelar</a>
+    </div>
+
+</div>
+
+
+<script>
+
+    window.onload = function () {
+
+        fnObterCidades();
+
+        if ($('#hdnSexo').val() == '1') {
+            $('#rdoSexoMasculino').prop("checked", true);
+        } else {
+            $('#rdoSexoFeminino').prop("checked", true);
+        }
+
+    }
+
+    function fnEditarCadastro() {
+
+        //Validação
+        if ($('#cpf').val() == '') {
+            alert("Preencha o campo CPF");
+            return;
+        } else if (/[^\d]/g.test($('#cpf').val())) {
+            alert("Preencha o campo CPF somente com numeros");
+            return;
+        } else if ($('#nome').val() == '') {
+            alert("Preencha o campo Nome");
+            return;
+        } else if ($('#dtNascimento').val() == '') {
+            alert("Preencha o campo Data de Nascimento");
+            return;
+        } else if ($('#endereco').val() == '') {
+            alert("Preencha o campo Endereço");
+            return;
+        } else if ($('#estado').val() == 0) {
+            alert("Selecione um Estado");
+            return;
+        } else if ($('#cidade').val() == 0) {
+            alert("Selecione uma Cidade");
+            return;
+        }
+
+        var parametros = {};
+        parametros.Id = $('#hdnIdCliente').val();
+        parametros.Nome = $('#nome').val();
+        parametros.CPF = $('#cpf').val();
+        parametros.DtNascimento = $('#dtNascimento').val();
+        parametros.Sexo = parseInt($("input[name='rdoSexo']:checked").val());
+        parametros.Endereco = $('#endereco').val();;
+        parametros.EstadoId = $('#estado').val();
+        parametros.MunicipioId = $('#cidade').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/EditarCadastro',
+            data: JSON.stringify(parametros),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (result) {
+
+                alert(result.Mensagem);
+                setTimeout(function () {
+                    window.location.href = "/Home/Index";
+                }, 500)
+
+            }
+        });
+    }
+
+
+    function fnObterCidades() {
+
+        var cidadeId = $('#hdnIdCidade').val();
+
+        var parametros = {};
+        parametros.UF = $('#estado').find(':selected').attr('data-UF');
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/ObterCidadesPorEstado',
+            data: JSON.stringify(parametros),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'JSON',
+            success: function (result) {
+                if (result.Status == true) {
+
+                    $('#cidade').empty();
+
+                    var optionCidadeHtml = '<option value="0">Selecione</option>';
+
+                    $.each(result.Content, function (k, dados) {
+
+                        if (dados.Id == cidadeId) {
+                            optionCidadeHtml += '<option value="' + dados.Id + '" selected>' + dados.Nome + '</option>';
+                        } else {
+                            optionCidadeHtml += '<option value="' + dados.Id + '" >' + dados.Nome + '</option>';
+                        }
+
+                    })
+
+                    $('#cidade').html(optionCidadeHtml);
+                }
+            }
+        })
+    }
+
+</script>
+

@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Upd8DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CadCliente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar(max)" />
+          <Property Name="CPF" Type="varchar" MaxLength="11" />
+          <Property Name="DtNascimento" Type="datetime" />
+          <Property Name="Sexo" Type="bit" />
+          <Property Name="Endereco" Type="varchar(max)" />
+          <Property Name="EstadoId" Type="int" />
+          <Property Name="MunicipioId" Type="int" />
+        </EntityType>
+        <EntityType Name="Estado">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoUf" Type="int" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Uf" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="Regiao" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Municipio">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Codigo" Type="int" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Uf" Type="char" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Upd8DB.dbo.vwClienteComLocalizacaoCompleta' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwClienteComLocalizacaoCompleta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Nome" Type="varchar(max)" />
+          <Property Name="CPF" Type="varchar" MaxLength="11" />
+          <Property Name="DtNascimento" Type="datetime" />
+          <Property Name="Sexo" Type="bit" />
+          <Property Name="Endereco" Type="varchar(max)" />
+          <Property Name="EstadoId" Type="int" />
+          <Property Name="MunicipioId" Type="int" />
+          <Property Name="UF" Type="char" MaxLength="2" />
+          <Property Name="Cidade" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityContainer Name="Upd8DBModelStoreContainer">
+          <EntitySet Name="CadCliente" EntityType="Self.CadCliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Estado" EntityType="Self.Estado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vwClienteComLocalizacaoCompleta" EntityType="Self.vwClienteComLocalizacaoCompleta" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwClienteComLocalizacaoCompleta].[Id] AS [Id], 
+    [vwClienteComLocalizacaoCompleta].[Nome] AS [Nome], 
+    [vwClienteComLocalizacaoCompleta].[CPF] AS [CPF], 
+    [vwClienteComLocalizacaoCompleta].[DtNascimento] AS [DtNascimento], 
+    [vwClienteComLocalizacaoCompleta].[Sexo] AS [Sexo], 
+    [vwClienteComLocalizacaoCompleta].[Endereco] AS [Endereco], 
+    [vwClienteComLocalizacaoCompleta].[EstadoId] AS [EstadoId], 
+    [vwClienteComLocalizacaoCompleta].[MunicipioId] AS [MunicipioId], 
+    [vwClienteComLocalizacaoCompleta].[UF] AS [UF], 
+    [vwClienteComLocalizacaoCompleta].[Cidade] AS [Cidade]
+    FROM [dbo].[vwClienteComLocalizacaoCompleta] AS [vwClienteComLocalizacaoCompleta]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Upd8DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Upd8DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CadCliente" EntityType="Upd8DBModel.CadCliente" />
+          <EntitySet Name="Estado" EntityType="Upd8DBModel.Estado" />
+          <EntitySet Name="Municipio" EntityType="Upd8DBModel.Municipio" />
+          <EntitySet Name="vwClienteComLocalizacaoCompleta" EntityType="Upd8DBModel.vwClienteComLocalizacaoCompleta" />
+        </EntityContainer>
+        <EntityType Name="CadCliente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CPF" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="DtNascimento" Type="DateTime" Precision="3" />
+          <Property Name="Sexo" Type="Boolean" />
+          <Property Name="Endereco" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="EstadoId" Type="Int32" />
+          <Property Name="MunicipioId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Estado">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoUf" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Uf" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="Regiao" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Municipio">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Codigo" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Uf" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="vwClienteComLocalizacaoCompleta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CPF" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="DtNascimento" Type="DateTime" Precision="3" />
+          <Property Name="Sexo" Type="Boolean" />
+          <Property Name="Endereco" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="EstadoId" Type="Int32" />
+          <Property Name="MunicipioId" Type="Int32" />
+          <Property Name="UF" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="Cidade" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Upd8DBModelStoreContainer" CdmEntityContainer="Upd8DBEntities">
+          <EntitySetMapping Name="CadCliente">
+            <EntityTypeMapping TypeName="Upd8DBModel.CadCliente">
+              <MappingFragment StoreEntitySet="CadCliente">
+                <ScalarProperty Name="MunicipioId" ColumnName="MunicipioId" />
+                <ScalarProperty Name="EstadoId" ColumnName="EstadoId" />
+                <ScalarProperty Name="Endereco" ColumnName="Endereco" />
+                <ScalarProperty Name="Sexo" ColumnName="Sexo" />
+                <ScalarProperty Name="DtNascimento" ColumnName="DtNascimento" />
+                <ScalarProperty Name="CPF" ColumnName="CPF" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Estado">
+            <EntityTypeMapping TypeName="Upd8DBModel.Estado">
+              <MappingFragment StoreEntitySet="Estado">
+                <ScalarProperty Name="Regiao" ColumnName="Regiao" />
+                <ScalarProperty Name="Uf" ColumnName="Uf" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="CodigoUf" ColumnName="CodigoUf" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Municipio">
+            <EntityTypeMapping TypeName="Upd8DBModel.Municipio">
+              <MappingFragment StoreEntitySet="Municipio">
+                <ScalarProperty Name="Uf" ColumnName="Uf" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwClienteComLocalizacaoCompleta">
+            <EntityTypeMapping TypeName="Upd8DBModel.vwClienteComLocalizacaoCompleta">
+              <MappingFragment StoreEntitySet="vwClienteComLocalizacaoCompleta">
+                <ScalarProperty Name="Cidade" ColumnName="Cidade" />
+                <ScalarProperty Name="UF" ColumnName="UF" />
+                <ScalarProperty Name="MunicipioId" ColumnName="MunicipioId" />
+                <ScalarProperty Name="EstadoId" ColumnName="EstadoId" />
+                <ScalarProperty Name="Endereco" ColumnName="Endereco" />
+                <ScalarProperty Name="Sexo" ColumnName="Sexo" />
+                <ScalarProperty Name="DtNascimento" ColumnName="DtNascimento" />
+                <ScalarProperty Name="CPF" ColumnName="CPF" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

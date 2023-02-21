@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Upd8DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CadCliente">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar(max)" />
+    <Property Name="CPF" Type="varchar" MaxLength="11" />
+    <Property Name="DtNascimento" Type="datetime" />
+    <Property Name="Sexo" Type="bit" />
+    <Property Name="Endereco" Type="varchar(max)" />
+    <Property Name="EstadoId" Type="int" />
+    <Property Name="MunicipioId" Type="int" />
+  </EntityType>
+  <EntityType Name="Estado">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CodigoUf" Type="int" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Uf" Type="char" MaxLength="2" Nullable="false" />
+    <Property Name="Regiao" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Municipio">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Codigo" Type="int" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Uf" Type="char" MaxLength="2" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Upd8DB.dbo.vwClienteComLocalizacaoCompleta' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vwClienteComLocalizacaoCompleta">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Nome" Type="varchar(max)" />
+    <Property Name="CPF" Type="varchar" MaxLength="11" />
+    <Property Name="DtNascimento" Type="datetime" />
+    <Property Name="Sexo" Type="bit" />
+    <Property Name="Endereco" Type="varchar(max)" />
+    <Property Name="EstadoId" Type="int" />
+    <Property Name="MunicipioId" Type="int" />
+    <Property Name="UF" Type="char" MaxLength="2" />
+    <Property Name="Cidade" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityContainer Name="Upd8DBModelStoreContainer">
+    <EntitySet Name="CadCliente" EntityType="Self.CadCliente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Estado" EntityType="Self.Estado" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vwClienteComLocalizacaoCompleta" EntityType="Self.vwClienteComLocalizacaoCompleta" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [vwClienteComLocalizacaoCompleta].[Id] AS [Id], 
+    [vwClienteComLocalizacaoCompleta].[Nome] AS [Nome], 
+    [vwClienteComLocalizacaoCompleta].[CPF] AS [CPF], 
+    [vwClienteComLocalizacaoCompleta].[DtNascimento] AS [DtNascimento], 
+    [vwClienteComLocalizacaoCompleta].[Sexo] AS [Sexo], 
+    [vwClienteComLocalizacaoCompleta].[Endereco] AS [Endereco], 
+    [vwClienteComLocalizacaoCompleta].[EstadoId] AS [EstadoId], 
+    [vwClienteComLocalizacaoCompleta].[MunicipioId] AS [MunicipioId], 
+    [vwClienteComLocalizacaoCompleta].[UF] AS [UF], 
+    [vwClienteComLocalizacaoCompleta].[Cidade] AS [Cidade]
+    FROM [dbo].[vwClienteComLocalizacaoCompleta] AS [vwClienteComLocalizacaoCompleta]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

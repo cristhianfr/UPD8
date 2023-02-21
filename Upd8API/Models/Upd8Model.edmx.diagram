@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ccf0f649c93b4de38e0b89f00ef8ee26" Name="Diagram1">
+        <EntityTypeShape EntityType="Upd8DBModel.CadCliente" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Upd8DBModel.Estado" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Upd8DBModel.Municipio" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Upd8DBModel.vwClienteComLocalizacaoCompleta" Width="1.5" PointX="5.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

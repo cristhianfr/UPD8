@@ -1,0 +1,230 @@
+﻿
+
+@model dynamic
+
+<div>
+    <h3>Consultar Cliente </h3>
+</div>
+
+<div class="jumbotron">
+
+    <div class="row">
+
+        <input type="hidden" id="hdnIdCliente" value="0" />
+
+        <div class="col-sm-3 col-lg-3">
+            <label>CPF</label>
+            <input type="text" name="cpf" id="cpf" class="form-control" maxlength="11" required>
+        </div>
+
+        <div class="col-sm-3 col-lg-3">
+            <label>Nome</label>
+            <input type="text" name="nome" id="nome" class="form-control" required>
+        </div>
+
+        <div class="col-sm-3 col-lg-3">
+            <label>Data de Nascimento</label>
+            <input type="date" name="dtNascimento" id="dtNascimento" class="form-control" required>
+        </div>
+
+        <div class="col-sm-3 col-lg-3">
+            <div>
+                <label>Sexo</label>
+            </div>
+
+            <div class="col-sm-6 col-lg-6">
+                <input type="radio" name="rdoSexo" id="rdoSexoMasculino" value="1" checked>
+                <label for="">Masculino</label>
+            </div>
+
+            <div class="col-sm-6 col-lg-6">
+                <input type="radio" name="rdoSexo" id="rdoSexoFeminino" value="0">
+                <label for="">Feminino</label>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row ">
+
+        <div class="form-group col-sm-4 col-lg-4  ">
+            <label>Estado</label>
+            <select name="estado" id="estado" class="form-control form-control" onchange="fnObterCidades()" required>
+                <option value="0">Selecione</option>
+                @foreach (var item in Model.Estados)
+                {
+                    <option value="@item.Id" data-UF="@item.Uf">@item.Uf</option>
+                }
+            </select>
+
+        </div>
+
+        <div class="form-group col-sm-4 col-lg-4">
+            <label>Cidade</label>
+            <select name="cidade" id="cidade" class="form-control form-control" required>
+                <option value="0">Selecione</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="form-group text-right col-sm-12 col-lg-12">
+        <button type="button" id="btn_Pesquisar" class="btn btn-primary" onclick="fnPesquisar()">Pesquisar</button>
+        <button type="button" id="btn_Limpar" class="btn btn-default" onclick="fnLimpar()">Limpar</button>
+    </div>
+
+</div>
+
+
+
+<div>
+    <div class="form-group text-left col-sm-12 col-lg-12">
+        <a href="~/Home/Cadastro" id="btn_NovoCadastro" class="btn btn-primary btn-sm">Novo Cadastro</a>
+    </div>
+    <table id="tableResult" name="tableResult" style="width:100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Cliente</th>
+                <th>CPF</th>
+                <th>Data Nasc</th>
+                <th>Estado</th>
+                <th>Cidade</th>
+                <th>Sexo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model.Cadastro.Content)
+                {
+                    <tr>
+                        <td><a href="~/Home/Editar/@item.Id" id="btn_Editar" value="@item.Id" class="btn btn-success btn-sm">Editar</a></td>
+                        <td><button type="button" id="btn_Excluir" value="@item.Id" class="btn btn-danger btn-sm" onclick="fnMsgExclusao(@item.Id)">Excluir</button></td>
+                        <td>@item.Nome</td>
+                        <td>@item.CPF</td>
+                        <td>@item.DtNascimento.ToString("dd/MM/yyyy")</td>
+                        <td>@item.UF</td>
+                        <td>@item.Cidade</td>
+                        <td>@(item.Sexo == true ? "Masculino" : "Feminino" ) </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+
+    function fnPesquisar() {
+
+        var parametros = {};
+        parametros.Nome = $('#nome').val();
+        parametros.CPF = $('#cpf').val();
+        parametros.DtNascimento = $('#dtNascimento').val();
+        parametros.Endereco = $('#endereco').val();
+        parametros.EstadoId = $('#estado').val();
+        parametros.MunicipioId = $('#cidade').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/Pesquisar',
+            data: JSON.stringify(parametros),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (result) {
+
+                $('#tableResult tbody > tr').remove()
+
+                $.each(result.Content, function (item, value) {
+
+                    $('#tableResult').find('tbody').append($('<tr>')
+                        .append($('<td><a href="/Home/Editar/' + value.Id + '" id="btn_Editar" value="' + value.Id + '" class="btn btn-success btn-sm">Editar</a></td>'))
+                        .append($('<td><button type="button" id="btn_Excluir" value="' + value.Id + '" class="btn btn-danger btn-sm" onclick="fnMsgExclusao(' + value.Id + ')">Excluir</button></td>'))
+                        .append($('<td>' + value.Nome + '</td>'))
+                        .append($('<td>' + value.CPF + '</td>'))
+                        .append($('<td>' + moment(value.DtNascimento).format("DD/MM/YYYY")  + '</td>'))
+                        .append($('<td>' + value.UF + '</td>'))
+                        .append($('<td>' + value.Cidade + '</td>'))
+                        .append($('<td>' + (value.Sexo == true ? "Masculino" : "Feminino") + '</td>'))
+                    ).append($('</tr>'));
+                });
+            }
+        });
+    }
+
+    function fnLimpar() {
+        $('#nome').val('');
+        $('#cpf').val('');
+        $('#dtNascimento').val('');
+        $('#endereco').val('');
+        $('#estado').val(0);
+        $('#cidade').val(0);
+    }
+
+    function fnMsgExclusao(id) {
+
+        var registroId = parseInt(id)
+
+        var result = confirm("Deseja excluir o cadastro?");
+
+        if (result == true) {
+
+            fnExclusao(registroId);
+        }
+
+    }
+
+
+    function fnExclusao(id) {
+
+        var parametros = {};
+        parametros.Id = parseInt(id);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/Excluir',
+            data: JSON.stringify(parametros),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (result) {
+
+                alert(result.Mensagem);
+                location.reload(true);
+            }
+        });
+    }
+
+    function fnObterCidades() {
+
+        var parametros = {};
+        parametros.UF = $('#estado').find(':selected').attr('data-UF');
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/ObterCidadesPorEstado',
+            data: JSON.stringify(parametros),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'JSON',
+            success: function (result) {
+                if (result.Status == true) {
+
+                    $('#cidade').empty();
+
+                    var optionCidadeHtml = '<option value="0">Selecione</option>';
+
+                    $.each(result.Content, function (k, dados) {
+                        optionCidadeHtml += '<option value="' + dados.Id + '">' + dados.Nome + '</option>';
+                    })
+
+                    $('#cidade').html(optionCidadeHtml);
+                }
+            }
+        })
+    }
+
+</script>
